@@ -8,10 +8,28 @@ const app = express();
 app.use(express.static('public'));
 
 
-//return array of notes
+//verbose solution
 app.get('/api/notes', (req, res) => {
+  const searchTerm = req.query.searchTerm; 
+  if (searchTerm) {
+      let filteredList = data.filter(function(item) {
+          return item.title.includes(searchTerm);
+      });
+    res.json(filteredList);
+  } else {
   res.json(data);
-});
+};
+//type in on postman ?searchTerm=lorem
+// terse solution
+// const {searchTerm } = req.query;
+// res.json(searchTerm ? data.filter(item => item.title.includes(searchTerm)) : data);
+
+
+//verbose solutution 
+// const note = data.find(function(item) {
+//     return item.id === Number(id);
+// });
+// res.json(note);
 
 
 app.get('/api/notes/:id', (req, res) => {
