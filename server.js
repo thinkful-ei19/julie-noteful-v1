@@ -11,6 +11,7 @@ const notes = simDB.initialize(data);
 const app = express();
 
 app.use(express.static('public'));
+app.use(express.json());
 app.use(morgan('common'));
 
 
@@ -57,8 +58,16 @@ app.get('/boom', (req, res, next) => {
 // res.json(note);
 
 
-app.get('/api/notes/:id', (req, res) => {
-  res.json(data.find(item => item.id === Number(req.params.id)));
+app.get('/api/notes/:id', (req, res, next) => {
+  const {id} = req.params; //returns string not number
+
+  notes.find(Number(id), (err,item) => {
+    if (err) {
+      return next(err);
+    }
+    res.json(item);
+  });
+//   res.json(data.find(item => item.id === Number(req.params.id)));
 });
 
 //404 error handler
