@@ -14,6 +14,9 @@ app.get('/api/notes', (req, res) => {
 });
 
 
+app.get('/api/notes/:id', (req, res) => {
+  res.json(data.find(item => item.id === Number(req.params.id)));
+});
 
 // Listen for incoming connections
 app.listen(8080, function () {
