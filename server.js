@@ -70,6 +70,32 @@ app.get('/api/notes/:id', (req, res, next) => {
 //   res.json(data.find(item => item.id === Number(req.params.id)));
 });
 
+app.put('/api/notes/:id', (req, res, next) => {
+  const id = req.params.id;
+  
+  /***** Never trust users - validate input *****/
+  const updateObj = {};
+  const updateFields = ['title', 'content']; //only these keys can be changed
+  
+  updateFields.forEach(field => {
+    if (field in req.body) {
+      updateObj[field] = req.body[field];
+    }
+  });
+  
+  notes.update(id, updateObj, (err, item) => {
+    if (err) {
+      return next(err);
+    }
+    if (item) {
+      res.json(item);
+    } else {
+      next();
+    }
+  });
+});
+
+
 //404 error handler
 app.use(function (req, res, next) {
   var err = new Error('Not Found');

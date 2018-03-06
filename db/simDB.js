@@ -76,7 +76,8 @@ const simDB = {
         if (!item) {
           return callback(null, null);
         }
-        Object.assign(item, updateItem);
+        Object.assign(item, updateItem); //pass in diffferent objects. left is original, right writes over 
+        //keys on left so you can update pieces instead of all of it
         callback(null, item);
       } catch (err) {
         callback(err);
