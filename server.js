@@ -2,24 +2,26 @@
 
 const { PORT } = require('./config');
 const express = require('express');
+const morgan = require('morgan');
 
 const data = require('./db/notes');
-
 const app = express();
-app.use(express.static('public'));
 
+app.use(express.static('public'));
+app.use(morgan('common'));
 
 //verbose solution
 app.get('/api/notes', (req, res) => {
   const searchTerm = req.query.searchTerm; 
   if (searchTerm) {
-      let filteredList = data.filter(function(item) {
-          return item.title.includes(searchTerm);
-      });
+    let filteredList = data.filter(function(item) {
+      return item.title.includes(searchTerm);
+    });
     res.json(filteredList);
   } else {
-  res.json(data);
-};
+    res.json(data);
+  }
+});
 //type in on postman ?searchTerm=lorem
 // terse solution
 // const {searchTerm } = req.query;
