@@ -10,22 +10,24 @@ const simDB = require('./db/simDB');
 const notes = simDB.initialize(data); 
 
 const app = express();
+const notesRouter = require('./routers/notes.router');
+
 app.use(morgan('dev'));
 app.use(express.static('public'));
 app.use(express.json());
+app.use('/v1', notesRouter);
 
 
-
-app.get('/api/notes', (req, res, next) => {
-  const { searchTerm } = req.query;
+// app.get('/api/notes', (req, res, next) => {
+//   const { searchTerm } = req.query;
   
-  notes.filter(searchTerm, (err, list) => {
-    if (err) {
-      return next(err); // goes to error handler
-    }
-    res.json(list); // responds with filtered array
-  });
-});
+//   notes.filter(searchTerm, (err, list) => {
+//     if (err) {
+//       return next(err); // goes to error handler
+//     }
+//     res.json(list); // responds with filtered array
+//   });
+// });
 
 
 //verbose solution replaced by above
@@ -59,42 +61,42 @@ app.get('/boom', (req, res, next) => {
 // res.json(note);
 
 
-app.get('/api/notes/:id', (req, res, next) => {
-  const {id} = req.params; //returns string not number
+// app.get('/api/notes/:id', (req, res, next) => {
+//   const {id} = req.params; //returns string not number
 
-  notes.find(Number(id), (err,item) => {
-    if (err) {
-      return next(err);
-    }
-    res.json(item);
-  });
-//   res.json(data.find(item => item.id === Number(req.params.id)));
-});
+//   notes.find(Number(id), (err,item) => {
+//     if (err) {
+//       return next(err);
+//     }
+//     res.json(item);
+//   });
+// //   res.json(data.find(item => item.id === Number(req.params.id)));
+// });
 
-app.put('/api/notes/:id', (req, res, next) => {
-  const id = req.params.id;
+// app.put('/api/notes/:id', (req, res, next) => {
+//   const id = req.params.id;
   
-  /***** Never trust users - validate input *****/
-  const updateObj = {};
-  const updateFields = ['title', 'content']; //only these keys can be changed
+//   /***** Never trust users - validate input *****/
+//   const updateObj = {};
+//   const updateFields = ['title', 'content']; //only these keys can be changed
   
-  updateFields.forEach(field => {
-    if (field in req.body) {
-      updateObj[field] = req.body[field];
-    }
-  });
+//   updateFields.forEach(field => {
+//     if (field in req.body) {
+//       updateObj[field] = req.body[field];
+//     }
+//   });
   
-  notes.update(id, updateObj, (err, item) => {
-    if (err) {
-      return next(err);
-    }
-    if (item) {
-      res.json(item);
-    } else {
-      next();
-    }
-  });
-});
+//   notes.update(id, updateObj, (err, item) => {
+//     if (err) {
+//       return next(err);
+//     }
+//     if (item) {
+//       res.json(item);
+//     } else {
+//       next();
+//     }
+//   });
+// });
 
 
 //404 error handler

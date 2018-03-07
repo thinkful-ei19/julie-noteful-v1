@@ -50,6 +50,14 @@ const noteful = (function () {
     });
   }
 
+  function handleNoteStartNewSubmit() {
+    $('.js-start-new-note-form').on('submit', event => {
+      event.preventDefault();
+      store.currentNote = false;
+      render();
+    });
+  }
+
   function handleNoteSearchSubmit() {
     $('.js-notes-search-form').on('submit', event => {
       event.preventDefault();
@@ -68,33 +76,43 @@ const noteful = (function () {
   function handleNoteFormSubmit() {
     $('.js-note-edit-form').on('submit', function (event) {
       event.preventDefault();
-
+  
       const editForm = $(event.currentTarget);
-
+  
       const noteObj = {
+        id: store.currentNote.id,
         title: editForm.find('.js-note-title-entry').val(),
         content: editForm.find('.js-note-content-entry').val()
       };
-
-      noteObj.id = store.currentNote.id;
-
-      api.update(noteObj.id, noteObj, updateResponse => {
-        store.currentNote = updateResponse;
-
-        render();
-      });
-
+  
+      if (store.currentNote.id) {
+  
+        api.update(store.currentNote.id, noteObj, updateResponse => {
+          store.currentNote = updateResponse;
+  
+          api.search(store.currentSearchTerm, updateResponse => {
+            store.notes = updateResponse;
+            render();
+          });
+  
+        });
+  
+      } else {
+  
+        api.create(noteObj, updateResponse => {
+          store.currentNote = updateResponse;
+  
+          api.search(store.currentSearchTerm, updateResponse => {
+            store.notes = updateResponse;
+            render();
+          });
+  
+        });
+      }
+  
     });
   }
 
-  function handleNoteStartNewSubmit() {
-    $('.js-start-new-note-form').on('submit', event => {
-      event.preventDefault();
-
-      console.log('Start New Note, coming soon...');
-
-    });
-  }
 
   function handleNoteDeleteClick() {
     $('.js-notes-list').on('click', '.js-note-delete-button', event => {
@@ -108,10 +126,9 @@ const noteful = (function () {
   function bindEventListeners() {
     handleNoteItemClick();
     handleNoteSearchSubmit();
-
+    handleNoteDeleteClick();
     handleNoteFormSubmit();
     handleNoteStartNewSubmit();
-    handleNoteDeleteClick();
   }
 
   // This object contains the only exposed methods from this module:
