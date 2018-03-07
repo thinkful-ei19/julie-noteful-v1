@@ -1,18 +1,19 @@
 'use strict';
 
-const { PORT } = require('./config');
+
 const express = require('express');
 const morgan = require('morgan');
+const { PORT } = require('./config');
 
 const data = require('./db/notes');
 const simDB = require('./db/simDB');  
 const notes = simDB.initialize(data); 
 
 const app = express();
-
+app.use(morgan('dev'));
 app.use(express.static('public'));
 app.use(express.json());
-app.use(morgan('common'));
+
 
 
 app.get('/api/notes', (req, res, next) => {
