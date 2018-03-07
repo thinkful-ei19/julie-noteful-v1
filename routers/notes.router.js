@@ -1,5 +1,6 @@
 'use strict';
 
+
 const express = require('express');
 const router = express.Router();
 
@@ -74,6 +75,22 @@ router.post('/notes', (req, res, next) => {
     }
     if (item) {
       res.location(`http://${req.headers.host}/notes/${item.id}`).status(201).json(item);
+    } else {
+      next();
+    }
+  });
+});
+
+
+
+router.delete('/notes/:id', (req, res, next) => {
+  const id = req.params.id;
+  notes.delete(id, (err, result)=> {
+    if (err) {
+      return next(err);
+    }
+    if (result) {
+      res.sendStatus(204);
     } else {
       next();
     }

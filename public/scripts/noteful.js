@@ -117,9 +117,16 @@ const noteful = (function () {
   function handleNoteDeleteClick() {
     $('.js-notes-list').on('click', '.js-note-delete-button', event => {
       event.preventDefault();
-
-      console.log('Delete Note, coming soon...');
-      
+      const id = getNoteIdFromElement(event.currentTarget);
+      api.remove(id, () => {
+        api.search(store.currentSearchTerm, searchResponse => {
+          store.notes = searchResponse;
+          if (id === store.currentNote.id) {
+            store.currentNote = {};
+          }
+          render();
+        });
+      });  
     });
   }
 

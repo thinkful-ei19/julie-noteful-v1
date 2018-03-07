@@ -45,4 +45,14 @@ const api = {
     });
   },
 
+  remove: function(id, callback) {
+    return $.ajax({
+      type: 'DELETE',
+      url: `/v1/notes/${id}`,
+      contentType: 'application/json',
+      success: callback,
+    });
+  }
+
+
 }; 
