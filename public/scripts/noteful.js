@@ -1,5 +1,6 @@
 /* global $ store api */
 'use strict';
+//frontend just reflects what backend says. A presentation of backend 
 
 const noteful = (function () {
 
@@ -42,7 +43,7 @@ const noteful = (function () {
 
       const noteId = getNoteIdFromElement(event.currentTarget);
 
-      api.details(noteId, detailsResponse => {
+      api.details(noteId, (detailsResponse) => {
         store.currentNote = detailsResponse;
         render();
       });

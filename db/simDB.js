@@ -1,4 +1,4 @@
-'use strict';
+'use strict';  //simulated database
 
 // Simple In-Memory Database (async-callback version)
 const DELAY = 250;

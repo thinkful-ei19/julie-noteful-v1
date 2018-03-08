@@ -1,8 +1,8 @@
 'use strict';
+//backend
 
-
-const express = require('express');
-const router = express.Router();
+const express = require('express'); // running file 
+const router = express.Router(); //if function is meant to be a creator, first letter is capitalized
 
 const data = require('../db/notes');
 const simDB = require('../db/simDB');
@@ -97,4 +97,4 @@ router.delete('/notes/:id', (req, res, next) => {
   });
 });
 
-module.exports = router;
+module.exports = router; //exporting custom built router

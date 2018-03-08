@@ -1,7 +1,7 @@
 'use strict';
+//server knows HOW to handle data i.e deleting notes
 
-
-const express = require('express');
+const express = require('express'); //importing
 const morgan = require('morgan');
 const { PORT } = require('./config');
 
@@ -10,9 +10,9 @@ const simDB = require('./db/simDB');
 const notes = simDB.initialize(data); 
 
 const app = express();
-const notesRouter = require('./routers/notes.router');
+const notesRouter = require('./routers/notes.router'); //importing built router
 
-app.use(morgan('dev'));
+app.use(morgan('dev')); //using as a function 
 app.use(express.static('public'));
 app.use(express.json());
 app.use('/v1', notesRouter);

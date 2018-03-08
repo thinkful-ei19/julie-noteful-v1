@@ -1,7 +1,9 @@
 /* global $ */
+//frontend application
 'use strict';
-
-const api = {
+//makes requests to server I built (or any server)
+//way to ask backend for data
+const api = { //communicate with backend from frontend 
   
   search: function (query, callback) {
     $.ajax({
@@ -14,11 +16,11 @@ const api = {
   },
   
   details: function (id, callback) {
-    $.ajax({
+    $.ajax({ //talking to api through endpoints
       type: 'GET',
       dataType: 'json',
       url: `/v1/notes/${id}`,
-      success: callback
+      success: callback //passes in results of api to the callback
     });
   },
 
