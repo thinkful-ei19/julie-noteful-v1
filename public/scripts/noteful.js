@@ -43,7 +43,7 @@ const noteful = (function () {
 
       const noteId = getNoteIdFromElement(event.currentTarget);
 
-      api.details(noteId, (detailsResponse) => {
+      api.details(noteId).then(detailsResponse => {
         store.currentNote = detailsResponse;
         render();
       });
@@ -66,7 +66,7 @@ const noteful = (function () {
       const searchTerm = $('.js-note-search-entry').val();
       store.currentSearchTerm = searchTerm ? { searchTerm } : {};
 
-      api.search(store.currentSearchTerm, searchResponse => {
+      api.search(store.currentSearchTerm).then(searchResponse => {
         store.notes = searchResponse;
         render();
       });
@@ -88,10 +88,10 @@ const noteful = (function () {
   
       if (store.currentNote.id) {
   
-        api.update(store.currentNote.id, noteObj, updateResponse => {
+        api.update(store.currentNote.id, noteObj).then(updateResponse => {
           store.currentNote = updateResponse;
   
-          api.search(store.currentSearchTerm, updateResponse => {
+          api.search(store.currentSearchTerm).then(updateResponse => {
             store.notes = updateResponse;
             render();
           });
@@ -100,10 +100,10 @@ const noteful = (function () {
   
       } else {
   
-        api.create(noteObj, updateResponse => {
+        api.create(noteObj).then(updateResponse => {
           store.currentNote = updateResponse;
   
-          api.search(store.currentSearchTerm, updateResponse => {
+          api.search(store.currentSearchTerm).then(updateResponse => {
             store.notes = updateResponse;
             render();
           });
@@ -119,8 +119,8 @@ const noteful = (function () {
     $('.js-notes-list').on('click', '.js-note-delete-button', event => {
       event.preventDefault();
       const id = getNoteIdFromElement(event.currentTarget);
-      api.remove(id, () => {
-        api.search(store.currentSearchTerm, searchResponse => {
+      api.remove(id).then(() => {
+        api.search({}).then(searchResponse => {
           store.notes = searchResponse;
           if (id === store.currentNote.id) {
             store.currentNote = {};
