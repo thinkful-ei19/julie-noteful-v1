@@ -10,10 +10,6 @@ $(document).ready(function () {
       noteful.render();
     });
 
-  
-
-
-
   const newNote = {
     title: 'new note',
     content: 'the body'
