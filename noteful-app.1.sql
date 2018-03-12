@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS notes;
 
-SELECT CURRENT_DATE;
+-- SELECT CURRENT_DATE;
 
 CREATE TABLE notes (
     id serial PRIMARY KEY,
@@ -9,7 +9,7 @@ CREATE TABLE notes (
     created timestamp DEFAULT now()
 );
 
-INSERT INTO notes ( titles, content )
+INSERT INTO notes (title, content)
     VALUES 
 (
     '5 life lessons learned from cats',
