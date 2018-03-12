@@ -58,19 +58,90 @@ describe('GET method', function() {
   });
 });
 
+
 describe('PUT method', function() {
   it('should update a note by its ID', function() {
-    const updateNote = {
-      'title': 'testing title',
-      'content': 'testing content'
+    const updateData = {
+      'title': 'updated title',
+      'content': 'updated content'
     };
     return chai.request(app)
-      .put('/v1/noted/1001')
-      .send(updateNote)
-      .then(function(res){
+      .put('/v1/notes/1005')
+      .send(updateData)
+      .then(function(res) {
         expect(res).to.have.status(200);
         expect(res).to.be.json;
         expect(res.body).to.be.a('object');
+        expect(res.body).to.include.keys('id', 'title', 'content');
+        expect(res.body.title).to.equal('updated title');
+        expect(res.body.content).to.equal('updated content');
+      });
+  });  
+  it('404 for invalid id', function() {
+    const updateData = {
+      'title': 'updated title',
+      'content': 'updated content'
+    };
+    return chai.request(app)
+      .put('/v1/notes/1005')
+      .send(updateData)
+      .catch(err => err.response)
+      .then(res => {
+        expect(res).to.have.status(404);
+      });
+  });
+});
+
+describe('POST method', function() {
+  it('should create and replace a new note if data is valid', function() {
+    const newNote = {
+      'title': 'test title',
+      'content': 'testing post method content'
+    };
+    return chai.request(app)
+      .post('/v1/notes')
+      .send(newNote)
+      .then(function(res) {
+        expect(res).to.have.status(201);
+        expect(res).to.be.json;
+        expect(res.body).to.be.an('object');
+        expect(res.body).to.include.keys('id', 'title', 'content');
+        expect(res.body.title).to.equal(newNote.title);
+        expect(res.body.content).to.equal(newNote.content);
+      });
+  });
+  it('should return an error with invalid POST data', function() {
+    const newNote = {
+      'false': 'this is invalid'
+    };
+    return chai.request(app)
+      .post('/v1/notes')
+      .send(newNote)
+      .catch(function(err){
+        return err.response;
+      })
+      .then(function(res){
+        expect(res).to.have.status(400);
+        expect(res).to.be.json;
+        expect(res.body.message).to.equal('Missing required content in body')
+      });
+  });
+});
+
+describe('DELETE method', function() {
+  it('should delete item', function() {
+    return chai.request(app)
+      .delete('/v1/notes/1005')
+      .then(function(res) {
+        expect(res).to.have.status(204);
+      });
+  });
+  it('should respond 404 for invalid deletion', function() {
+    return chai.request(app)
+      .delete('/api/notes/2000')
+      .catch(err => err.response)
+      .then(res => {
+        expect(res).to.have.status(404);
       });
   });
 });
