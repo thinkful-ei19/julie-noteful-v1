@@ -83,7 +83,7 @@ describe('PUT method', function() {
       'content': 'updated content'
     };
     return chai.request(app)
-      .put('/v1/notes/1005')
+      .put('/v1/notes/2000')
       .send(updateData)
       .catch(err => err.response)
       .then(res => {
@@ -123,7 +123,7 @@ describe('POST method', function() {
       .then(function(res){
         expect(res).to.have.status(400);
         expect(res).to.be.json;
-        expect(res.body.message).to.equal('Missing required content in body')
+        expect(res.body.message).to.equal('Missing required content in body');
       });
   });
 });
